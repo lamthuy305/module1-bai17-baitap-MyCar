@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="car.js"></script>
+  <script src="obstacle.js"></script>
+</head>
+<body>
+<canvas height="768" id="myCanvas" style="border: solid 1px" width="1368"></canvas>
+<script>
+  let canvas = document.getElementById("myCanvas");
+  let ctx = canvas.getContext('2d');
+  let myCar = new Car(100, 50, 150, 100, 30, 'car/car1.png');
+  let obstacle1 = new Obstacle(Math.random()*1368, 10, 50, 50);
+  let obstacle2 = new Obstacle(Math.random()*1368, 100, 50, 50);
+
+  myCar.drawCar(ctx);
+  obstacle1.drawObstacle(ctx);
+  obstacle2.drawObstacle(ctx);
+
+  function moveCar(event) {
+    switch (event.keyCode) {
+      case 37: {
+        myCar.moveLeft();
+        myCar.src = 'car/car3.png';
+        break;
+      }
+      case 39: {
+        myCar.moveRight();
+        myCar.src = 'car/car1.png';
+        break
+      }
+      case 38: {
+        myCar.moveUp();
+        myCar.src = 'car/car2.png';
+        break;
+      }
+      case 40: {
+        myCar.moveDown();
+        myCar.src = 'car/car4.png';
+        break;
+      }
+      case 32: {
+        myCar.upSpeed();
+        break;
+      }
+    }
+    updateCanvas();
+  }
+
+  function clearCanvas() {
+    ctx.clearRect(0, 0, 1368, 768);
+  }
+
+  function moveObstacle() {
+    if (obstacle1._y > canvas.clientHeight){
+      obstacle1._y = 0;
+      obstacle1._x = Math.random()*1368;
+
+    }
+    if (obstacle2._y > canvas.clientHeight){
+      obstacle2._y = 0;
+      obstacle2._x = Math.random()*1368;
+    }
+    obstacle1.moveDown();
+    obstacle2.moveDown();
+    updateCanvas();
+  }
+
+  function updateCanvas() {
+    clearCanvas();
+    obstacle1.drawObstacle(ctx);
+    obstacle2.drawObstacle(ctx);
+
+    myCar.drawCar(ctx);
+  }
+
+  setInterval(moveObstacle, 100);
+
+
+  document.addEventListener('keydown', moveCar);
+</script>
+</body>
+</html>
